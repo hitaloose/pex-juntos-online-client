@@ -10,58 +10,74 @@ import { loginSchema } from "../../schemas/auth-schema";
 export const Login = () => {
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = useCallback(async () => {
-    try {
-      const input = loginSchema.parse({ email, password });
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setLoading(true);
 
-      const { data } = await api.post("/auth/login", input);
+      try {
+        const input = loginSchema.parse({ email, password });
 
-      localStorage.setItem("TOKEN", data.token);
-      localStorage.setItem("USER", JSON.stringify(data.user));
+        const { data } = await api.post("/auth/login", input);
 
-      if (data.user.role === Role.PROVIDER) {
-        navigate(PAGES.DASHBOARD);
+        localStorage.setItem("TOKEN", data.token);
+        localStorage.setItem("USER", JSON.stringify(data.user));
+
+        if (data.user.role === Role.PROVIDER) {
+          navigate(PAGES.DASHBOARD);
+        }
+        if (data.user.role === Role.ADMIN) {
+          navigate(PAGES.ADMIN);
+        }
+      } catch (error) {
+        errorHandler(error);
+      } finally {
+        setLoading(false);
       }
-      if (data.user.role === Role.ADMIN) {
-        navigate(PAGES.ADMIN);
-      }
-    } catch (error) {
-      errorHandler(error);
-    }
-  }, [email, navigate, password]);
+    },
+    [email, navigate, password]
+  );
 
   return (
     <Card>
-      <Flex gap="4" direction={"column"}>
-        <Flex justify={"between"} align={"center"}>
-          <Heading>Acesso</Heading>
-          <NavLink to={PAGES.HOME}>Início</NavLink>
+      <form onSubmit={handleSubmit}>
+        <Flex gap="4" direction={"column"}>
+          <Flex justify={"between"} align={"center"}>
+            <Heading>Acesso</Heading>
+            <NavLink to={PAGES.HOME}>Início</NavLink>
+          </Flex>
+
+          <TextField.Root
+            required
+            disabled={loading}
+            placeholder="E-mail"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField.Root
+            required
+            disabled={loading}
+            placeholder="Senha"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <NavLink to={PAGES.SIGNUP}>Cadastrar</NavLink>
+
+          <Flex justify={"end"}>
+            <Button disabled={loading} loading={loading} type="submit">
+              Entrar
+            </Button>
+          </Flex>
         </Flex>
-
-        <TextField.Root
-          required
-          placeholder="E-mail"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField.Root
-          required
-          placeholder="Senha"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <NavLink to={PAGES.SIGNUP}>Cadastrar</NavLink>
-
-        <Flex justify={"end"}>
-          <Button onClick={handleSubmit}>Entrar</Button>
-        </Flex>
-      </Flex>
+      </form>
     </Card>
   );
 };

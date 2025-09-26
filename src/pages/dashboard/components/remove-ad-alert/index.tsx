@@ -13,14 +13,19 @@ export const RemoveAdAlert = (props: Props) => {
   const { ad, onRemove } = props;
 
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleRemoveClick = useCallback(async () => {
+    setLoading(true);
+
     try {
       await api.delete(`/ad/${ad.id}`);
       setOpen(false);
       onRemove?.();
     } catch (error) {
       errorHandler(error);
+    } finally {
+      setLoading(false);
     }
   }, [ad.id, onRemove]);
 
@@ -37,9 +42,17 @@ export const RemoveAdAlert = (props: Props) => {
 
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
-            <Button variant="soft">Cancelar</Button>
+            <Button disabled={loading} variant="soft">
+              Cancelar
+            </Button>
           </AlertDialog.Cancel>
-          <Button onClick={handleRemoveClick}>Confirmar</Button>
+          <Button
+            disabled={loading}
+            loading={loading}
+            onClick={handleRemoveClick}
+          >
+            Confirmar
+          </Button>
         </Flex>
       </AlertDialog.Content>
     </AlertDialog.Root>

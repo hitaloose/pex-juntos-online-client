@@ -5,7 +5,7 @@ export const signupSchema = z.object({
   email: z.email().min(1),
   password: z.string().min(1),
   passwordConfirmation: z.string().min(1),
-  phoneWhatsapp: z.string().min(1),
+  phoneWhatsapp: z.string().min(11).max(11),
   neighborhood: z.string().min(1),
 });
 

@@ -7,4 +7,6 @@ export type Ad = {
   category: string;
   provider: Provider;
   status: string;
+  imageUrl?: string;
+  image?: File;
 };

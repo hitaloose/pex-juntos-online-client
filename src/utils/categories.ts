@@ -7,6 +7,7 @@ export const CATEGORIES: { label: string; value: string }[] = [
   { value: "eletricista", label: "Eletricista" },
   { value: "cuidador", label: "Cuidador" },
   { value: "aulas", label: "Aulas" },
+  { value: "beleza", label: "Beleza" },
   { value: "outros", label: "Outros" },
 ];
 
@@ -19,5 +20,6 @@ export const MAPPED_CATEGORIES: Record<string, string> = {
   eletricista: "Eletricista",
   cuidador: "Cuidador",
   aulas: "Aulas",
+  beleza: "Beleza",
   outros: "Outros",
 };

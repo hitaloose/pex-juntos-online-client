@@ -4,6 +4,7 @@ export const adSchema = z.object({
   title: z.string(),
   description: z.string(),
   category: z.string(),
+  image: z.custom<File>().optional(),
 });
 
 export const searchAdsSchema = z.object({

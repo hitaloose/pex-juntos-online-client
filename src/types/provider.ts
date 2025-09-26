@@ -3,4 +3,6 @@ export type Provider = {
   name: string;
   phoneWhatsapp: string;
   neighborhood: string;
+  imageUrl?: string;
+  image?: File;
 };

@@ -13,14 +13,19 @@ export const ToggleStatusAlert = (props: Props) => {
   const { ad, onUpdate } = props;
 
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleConfirmClick = useCallback(async () => {
+    setLoading(true);
+
     try {
       await api.patch(`/ad/${ad.id}/toggle-status`);
       setOpen(false);
       onUpdate?.();
     } catch (error) {
       errorHandler(error);
+    } finally {
+      setLoading(false);
     }
   }, [ad.id, onUpdate]);
 
@@ -39,9 +44,17 @@ export const ToggleStatusAlert = (props: Props) => {
 
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
-            <Button variant="soft">Cancelar</Button>
+            <Button disabled={loading} variant="soft">
+              Cancelar
+            </Button>
           </AlertDialog.Cancel>
-          <Button onClick={handleConfirmClick}>Confirmar</Button>
+          <Button
+            disabled={loading}
+            loading={loading}
+            onClick={handleConfirmClick}
+          >
+            Confirmar
+          </Button>
         </Flex>
       </AlertDialog.Content>
     </AlertDialog.Root>

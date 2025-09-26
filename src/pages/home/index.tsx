@@ -6,29 +6,41 @@ import { EmptySearchCard } from "./components/empty-search-card";
 import { Flex } from "@radix-ui/themes";
 import { AdCard } from "./components/ad-card";
 import { useSearchParams } from "react-router";
+import { errorHandler } from "../../utils/error";
+import { LoadingCard } from "./components/loading-card";
 
 export const Home = () => {
   const [ads, setAds] = useState<Ad[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   const [searchParams] = useSearchParams();
 
   const handleDidMount = useCallback(async () => {
-    const q = searchParams.get("q");
-    let category = searchParams.get("category");
-    let neighborhood = searchParams.get("neighborhood");
+    setLoading(true);
 
-    if (category === "all") {
-      category = null;
+    try {
+      const q = searchParams.get("q");
+      let category = searchParams.get("category");
+      let neighborhood = searchParams.get("neighborhood");
+
+      if (category === "all") {
+        category = null;
+      }
+
+      if (neighborhood === "Todos") {
+        neighborhood = null;
+      }
+
+      const { data } = await api.get("/ad/search", {
+        params: { q, category, neighborhood },
+      });
+      setAds(data.ads);
+    } catch (error) {
+      errorHandler(error);
+    } finally {
+      setLoading(false);
     }
-
-    if (neighborhood === "Todos") {
-      neighborhood = null;
-    }
-
-    const { data } = await api.get("/ad/search", {
-      params: { q, category, neighborhood },
-    });
-    setAds(data.ads);
   }, [searchParams]);
 
   useEffect(() => {
@@ -38,12 +50,9 @@ export const Home = () => {
   return (
     <Flex direction={"column"} gap="4">
       <SearchBox />
-      {!ads.length && <EmptySearchCard />}
-      <>
-        {ads.map((ad) => (
-          <AdCard key={ad.id} ad={ad} />
-        ))}
-      </>
+      {loading && <LoadingCard />}
+      {!loading && !ads.length && <EmptySearchCard />}
+      <>{!loading && ads.map((ad) => <AdCard key={ad.id} ad={ad} />)}</>
     </Flex>
   );
 };

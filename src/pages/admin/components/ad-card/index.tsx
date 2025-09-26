@@ -9,19 +9,32 @@ type Props = {
   onUpdate?: () => void;
 };
 
+const PLACE_HOLDER_IMG = "https://placehold.co/600x400?text=Sem+imagem";
+
 export const AdCard = (props: Props) => {
   const { ad, onUpdate } = props;
 
   return (
     <Card>
-      <Flex justify={"between"} align={"center"}>
-        <Flex direction={"column"}>
-          <Text>Status: {MAPPEP_AD_STATUS[ad.status]}</Text>
-          <Text>Código: {ad.id}</Text>
-          <Text>Prestador: {ad.provider.name}</Text>
-          <Text>Título: {ad.title}</Text>
-          <Text>Descrição: {ad.description}</Text>
-          <Text>Categoria: {MAPPED_CATEGORIES[ad.category]}</Text>
+      <Flex justify={"between"}>
+        <Flex width={"100%"} direction={"row"} gap={"2"}>
+          <img
+            src={ad.imageUrl || PLACE_HOLDER_IMG}
+            style={{
+              objectFit: "cover",
+              width: 120,
+              height: "100%",
+              borderRadius: "var(--radius-2)",
+            }}
+          />
+          <Flex width={"100%"} flexGrow={"1"} direction={"column"}>
+            <Text>Status: {MAPPEP_AD_STATUS[ad.status]}</Text>
+            <Text>Código: {ad.id}</Text>
+            <Text>Prestador: {ad.provider.name}</Text>
+            <Text>Título: {ad.title}</Text>
+            <Text>Descrição: {ad.description}</Text>
+            <Text>Categoria: {MAPPED_CATEGORIES[ad.category]}</Text>
+          </Flex>
         </Flex>
         <Flex direction={"column"} gap={"2"}>
           <ToggleStatusAlert ad={ad} onUpdate={onUpdate} />
