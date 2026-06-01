@@ -1,69 +1,57 @@
-# React + TypeScript + Vite
+# Juntos Online Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web para o projeto "Juntos Online" - uma plataforma de classificados desenvolvida como projeto de faculdade.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Runtime**: Node.js (Vite dev server)
+- **Linguagem**: TypeScript
+- **Framework**: React 19
+- **Roteamento**: React Router 7
+- **UI**: Radix UI Themes
+- **HTTP Client**: Axios
+- **Validação**: Zod
 
-## Expanding the ESLint configuration
+## Scripts
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev      # Inicia o servidor de desenvolvimento com HMR
+npm run build    # Compila o projeto para produção
+npm run preview  # Visualiza o build de produção localmente
+npm run lint     # Verifica o código
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Releases
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **release-i**: Início do projeto - estrutura básica com autenticação, cadastro de provedores e listagem de anúncios
+- **release-ii**: Aprimoramento no gerenciamento de anúncios com estados de loading e uploads de imagem
+- **release-iii (atual)**: Documentação do projeto com README e testes automatizados
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+> As versões anteriores do código estão salvas nas branches `release-i` e `release-ii`.
+
+## Estrutura do Projeto
+
 ```
+src/
+├── containers/     # Wrappers de app e configuração de rotas
+├── pages/          # Páginas da aplicação (home, login, signup, dashboard, admin)
+├── components/     # Componentes reutilizáveis (CategorySelect, NeighborhoodSelect)
+├── services/       # Configuração do Axios com interceptor JWT
+├── schemas/        # Schemas de validação Zod
+├── types/          # Tipos e interfaces TypeScript
+├── utils/          # Utilitários (rotas, categorias, status de anúncios)
+├── main.tsx        # Ponto de entrada da aplicação
+└── vite-env.d.ts   # Tipos do ambiente Vite
+```
+
+## Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto com base no `.env.exemple`:
+
+```env
+VITE_API_URL=http://localhost:3333
+```
+
+## Autor
+
+Hitalo Loose (hitaloose@gmail.com)
